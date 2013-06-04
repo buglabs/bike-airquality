@@ -11,7 +11,7 @@ def getSwarms(apikey):
 
     @return: Returns a list containing all swarm objects owned by the user
     """
-    conn = httplib.HTTPConnection(apikey.server)
+    conn = httplib.HTTPConnection(apikey.server, apikey.port)
     conn.request("GET", "/swarms", None,
                  {"x-bugswarmapikey":apikey.configuration})
     resp = conn.getresponse()
@@ -129,7 +129,7 @@ class swarm:
         create_obj = {"name": name, "description": description,
                 "public": public, "resources": res_list}
         create_swarm_json = json.dumps(create_obj)
-        conn = httplib.HTTPConnection(apikey.server)
+        conn = httplib.HTTPConnection(apikey.server, apikey.port)
         conn.request("POST", "/swarms",create_swarm_json,
                      {"x-bugswarmapikey":apikey.configuration})
         resp = conn.getresponse()
@@ -147,7 +147,7 @@ class swarm:
 
     def getInfo(self):
         """Retrieve a swarm's information from the swarm server"""
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("GET", "/swarms/%s"%(self.id), None,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -210,7 +210,7 @@ class swarm:
         if public != None:
             update_swarm["public"] = public
         update_swarm_json = json.dumps(update_swarm)
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("PUT", "/swarms/%s"%(self.id), update_swarm_json,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -243,7 +243,7 @@ class swarm:
         elif resource.permission == resource.PERM_CONSUMER:
             add_resource["resource_type"] = resource.TYPE_CONSUMER
         add_resource_json = json.dumps(add_resource)
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("PUT", "/swarms/%s/resources"%(self.id), add_resource_json,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -256,7 +256,7 @@ class swarm:
         if resource.permission == resource.PERM_PROSUMER:
             add_resource["resource_type"] = resource.TYPE_CONSUMER
             add_resource_json = json.dumps(add_resource)
-            conn = httplib.HTTPConnection(self.apikey.server)
+            conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
             conn.request("PUT", "/swarms/%s/resources"%(self.id), add_resource_json,
                          {"x-bugswarmapikey":self.apikey.configuration})
             resp = conn.getresponse()
@@ -278,7 +278,7 @@ class swarm:
 
         @return: returns a dict of resources, indexed by resource_id
         """
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         if resource_type != None:
             conn.request("GET", "/swarms/%s/resources?type=%s"%(self.id,resource_type),
                     None, {"x-bugswarmapikey":self.apikey.configuration})
@@ -331,7 +331,7 @@ class swarm:
         elif resource.permission == resource.PERM_CONSUMER:
             delete_resource["resource_type"] = resource.TYPE_CONSUMER
         delete_resource_json = json.dumps(delete_resource)
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("DELETE", "/swarms/%s/resources"%(self.id), delete_resource_json,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -346,7 +346,7 @@ class swarm:
         if resource.permission == resource.PERM_PROSUMER:
             delete_resource["resource_type"] = resource.TYPE_CONSUMER
             delete_resource_json = json.dumps(add_resource)
-            conn = httplib.HTTPConnection(self.apikey.server)
+            conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
             conn.request("DELETE", "/swarms/%s/resources"%(self.id),
                     delete_resource_json,
                     {"x-bugswarmapikey":self.apikey.configuration})
@@ -367,7 +367,7 @@ class swarm:
 
         @return: returns True if successful, False otherwise.
         """
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("DELETE", "/swarms/%s"%(self.id), None,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()

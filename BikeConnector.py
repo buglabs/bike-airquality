@@ -13,7 +13,7 @@ import socket
 class BikeConnector:
     def __init__(self, resource_name, device="/dev/ttyUSB0", lcd=Adafruit_CharLCDPlate()):
         logging.basicConfig(level=logging.INFO)
-        self.api = apikey.apikey("demo", "buglabs55")
+        self.api = apikey.apikey("demo", "buglabs55", port=8080)
         self.res = resource.getResourceByName(self.api, resource_name)
         self.swarms = self.res.getSwarms()
         self.airquality = 1024
@@ -77,7 +77,7 @@ class BikeConnector:
         pos = float(param[period-2:])/60.0
         pos = pos + int(param[:period-2])
         return pos
-        
+
     def parseSerial(self, msg):
         payload = {}
         if msg.startswith("$GPGGA"):
@@ -116,7 +116,7 @@ class BikeConnector:
 
     def produce(self, obj):
         msg = json.dumps(obj)
-        #print msg 
+        #print msg
         try:
             self.pt.produce(msg)
         except socket.timeout:

@@ -6,7 +6,7 @@ import logging
 import time
 
 logging.basicConfig(level=logging.INFO)
-api = apikey.apikey("demo","buglabs55")
+api = apikey.apikey("demo","buglabs55",port=8080)
 res = resource.getResourceByName(api,"Bike01")
 swarms = res.getSwarms()
 

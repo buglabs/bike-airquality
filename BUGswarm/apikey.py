@@ -15,7 +15,8 @@ class apikey:
     TYPE_PARTICIPATION = "participation"
     TYPE_BOTH = None
 
-    def __init__(self, username=False, password=False, server="api.bugswarm.net"):
+    def __init__(self, username=False, password=False,
+            server="api.bugswarm.net", port=80):
         """Create a new apikey object, retrieving keys from the server
 
         Username and Password may be omitted if keys are directly initialized
@@ -26,6 +27,7 @@ class apikey:
                        api.bugswarm.net
         """
         self.server = server
+        self.port = port
         self.username = username
         self.password = password
         self.configuration = False
@@ -41,7 +43,7 @@ class apikey:
         """
         self.username = username
         self.password = password
-        conn = httplib.HTTPConnection(self.server)
+        conn = httplib.HTTPConnection(self.server, self.port)
         auth_hash = username + ":" + password
         auth_header = "Basic " + base64.b64encode(auth_hash)
         logging.debug('Getting API keys with auth_header: '+auth_header)
@@ -97,7 +99,7 @@ class apikey:
             logging.error("Cannot generate API keys - "+
                           "Username and password not specified")
             return False
-        conn = httplib.HTTPConnection(self.server)
+        conn = httplib.HTTPConnection(self.server, self.port)
         auth_hash = self.username + ":" + self.password
         auth_header = "Basic " + base64.b64encode(auth_hash)
         if (key_type != None):

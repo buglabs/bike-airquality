@@ -12,7 +12,7 @@ def getResources(apikey):
 
     @return: returns a list of all resource objects owned by the user.
     """
-    conn = httplib.HTTPConnection(apikey.server)
+    conn = httplib.HTTPConnection(apikey.server, apikey.port)
     conn.request("GET", "/resources", None, {"x-bugswarmapikey":apikey.configuration})
     resp = conn.getresponse()
     txt = resp.read()
@@ -81,7 +81,7 @@ class resource:
 
     def getInfo(self):
         """Retrieve a resource's information from the swarm server"""
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("GET", "/resources/%s"%(self.id), None,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -114,7 +114,7 @@ class resource:
         if description != None:
             create_resource["description"] = description
         create_resource_json = json.dumps(create_resource)
-        conn = httplib.HTTPConnection(apikey.server)
+        conn = httplib.HTTPConnection(apikey.server, apikey.port)
         conn.request("POST", "/resources", create_resource_json,
                      {"x-bugswarmapikey":apikey.configuration})
         resp = conn.getresponse()
@@ -144,7 +144,7 @@ class resource:
         if description != None:
             update_resource["description"] = description
         update_resource_json = json.dumps(update_resource)
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("PUT", "/resources/%s"%(self.id), update_resource_json,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -165,7 +165,7 @@ class resource:
 
         @return: returns a list of swarm objects.
         """
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("GET", "/resources/%s/swarms"%(self.id), None,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()
@@ -216,7 +216,7 @@ class resource:
 
         @return: returns True if successful, False otherwise.
         """
-        conn = httplib.HTTPConnection(self.apikey.server)
+        conn = httplib.HTTPConnection(self.apikey.server, self.apikey.port)
         conn.request("DELETE", "/resources/%s"%(self.id), None,
                      {"x-bugswarmapikey":self.apikey.configuration})
         resp = conn.getresponse()

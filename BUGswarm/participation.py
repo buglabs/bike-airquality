@@ -25,7 +25,7 @@ class participationThread(threading.Thread):
         #still independently read and write to the socket.
         self.sock = socket.socket()
         self.sock.settimeout(1.0)
-        self.sock.connect((self.api.server, 80))
+        self.sock.connect((self.api.server, self.api.port))
         req = "POST /stream?"
         for swrm in self.swarms:
             req += "swarm_id="+swrm.id+"&"
