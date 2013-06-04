@@ -5,6 +5,8 @@ from BUGswarm import resource
 from BUGswarm import participation
 from pynmea import nmea
 import logging
+from datetime import datetime
+from commands import getoutput
 import time
 import serial
 import json
@@ -29,6 +31,11 @@ class BikeConnector:
         self.ser = serial.Serial(device, 9600, timeout=1)
         self.warmedup = False
         self.gpslock = False
+        getoutput('mkdir /home/pi/bikelogs/')
+        self.f = open(time.strftime("/home/pi/bikelogs/bikelog_%m%d%y_%H%M%S.csv", "w"))
+        self.f.write('time(min),latitude,longitude,airquality\n')
+        self.f.flush()
+        self.starttime = time.now()
 
     def runLoop(self):
         self.running = True
@@ -100,6 +107,9 @@ class BikeConnector:
             self.locationupdates = self.locationupdates + 1
             if self.locationupdates%6==0:
                 self.produce(payload)
+                self.f.write(str((time.time()-self.starttime)/60.0)+','+
+                    str(lat)+','+str(lon)+','+str(self.airquality)+'\n')
+                self.f.flush()
         if msg.startswith("$GPOSD"):
             msg = msg[:msg.find('*')]
             vals = msg.split(',')
